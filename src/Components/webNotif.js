@@ -68,7 +68,7 @@ class WebNotif extends React.Component {
 
     const title = 'Hello';
     const body = 'Task Name';
-    const tag = 'Your task is Due on ;
+    const tag = 'Your task is Due on' ;
     /*const icon = 'http://mobilusoss.github.io/react-web-notification/example/Notifications_button_24.png';*/
     // const icon = 'http://localhost:3000/Notifications_button_24.png';
 
