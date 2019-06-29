@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/ToDoReminder/static/css/main.4fec9533.chunk.css",
+    "main.js": "/ToDoReminder/static/js/main.2e93df18.chunk.js",
+    "main.js.map": "/ToDoReminder/static/js/main.2e93df18.chunk.js.map",
+    "runtime~main.js": "/ToDoReminder/static/js/runtime~main.2fbd5fdd.js",
+    "runtime~main.js.map": "/ToDoReminder/static/js/runtime~main.2fbd5fdd.js.map",
+    "static/css/2.c42630f0.chunk.css": "/ToDoReminder/static/css/2.c42630f0.chunk.css",
+    "static/js/2.3386cde0.chunk.js": "/ToDoReminder/static/js/2.3386cde0.chunk.js",
+    "static/js/2.3386cde0.chunk.js.map": "/ToDoReminder/static/js/2.3386cde0.chunk.js.map",
+    "index.html": "/ToDoReminder/index.html",
+    "precache-manifest.829481bca327c1516f132afb743581d9.js": "/ToDoReminder/precache-manifest.829481bca327c1516f132afb743581d9.js",
+    "service-worker.js": "/ToDoReminder/service-worker.js",
+    "static/css/2.c42630f0.chunk.css.map": "/ToDoReminder/static/css/2.c42630f0.chunk.css.map",
+    "static/css/main.4fec9533.chunk.css.map": "/ToDoReminder/static/css/main.4fec9533.chunk.css.map"
+  }
+}
