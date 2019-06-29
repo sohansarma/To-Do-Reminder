@@ -31,3 +31,9 @@
     transform: rotate(360deg);
   }
 }
+
+.navigation{
+  height: 56px;
+  background: #fafafa;
+  font-size: 20px;
+}
