@@ -1,35 +1,92 @@
 import React from 'react';
-
-
+import { connect } from 'react-redux';
+import moment from 'moment';
+import { deleteReminder,updateReminders } from '../Action/toDoAction';
 
 class TodoListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.onClickClose = this.onClickClose.bind(this);
-    this.onClickDone = this.onClickDone.bind(this);
+    this.state = {
+      checked: false,
+      title: '',
+      description: ''
+    }
   }
-  onClickClose() {
-    var index = parseInt(this.props.index);
-    this.props.removeItem(index);
+
+  completeState = (id) => {
+    const { checked } = this.state;
+    if (checked) {
+      this.setState({
+        checked: null,
+      });
+    } else {
+      this.setState({
+        checked: id,
+      })
+    }
   }
-  onClickDone() {
-    var index = parseInt(this.props.index);
-    this.props.markTodoDone(index);
+
+   deleteReminder = (id,e) => {
+    this.props.deleteReminder(id);
   }
+ 
   render () {
-    var todoClass = this.props.item.done ? 
-        "done" : "undone";
+    const { reminders } = this.props;
+    const { checked } = this.state;
     return(
-      <li className="list-group-item ">
-        <div className={todoClass}>
-          <span className="glyphicon glyphicon-ok icon" aria-hidden="true" onClick={this.onClickDone}></span>
-          {this.props.item.value}
-          <button type="button" className="close" onClick={this.onClickClose}>&times;</button>
+            <div className="width">
+        {
+          reminders.map((reminder,index) => {
+            return (
+              <div key={reminder.id}
+                   index={index} 
+                   onClick={() => this.completeState(reminder.id)}
+                   className={checked === reminder.id ? "d-flex list_container_checked flex-wrap justify-content-between" : "d-flex list_container flex-wrap justify-content-between"}
+                  >
+                  <div key={reminder.id}>
+                    <div 
+                       className={checked === reminder.id ? "title_style_checked" : "title_style"} 
+                       contenteditable="true"
+                       onInput={event => this.setState({title: event.target.value})}
+                       onChange={this.onSubmitTitle}
+                       >
+                        {reminder.title}
+                    </div>
+                    <div 
+                         className={checked === reminder.id ? "desc_style_checked" : "desc_style" }
+                         contenteditable="true"
+                         onInput={event => this.setState({description: event.target.value})}
+                       >
+                        {reminder.description}
+                    </div>
+                    {reminder.dueDate && 
+                      <div className="d-flex">
+                        <div className="Reminder_text d-flex align-items-center">Reminder set for</div>
+                        <div className="Date_style">{moment(new Date(reminder.dueDate)).format('lll')}</div>
+                      </div>
+                    }
+                    
+                  </div>
+                  <div 
+                    className="d-flex align-items-center"
+                    onClick={() => this.deleteReminder(reminder.id)}
+                  >
+                  <i className="material-icons delete_icon ">
+                  delete_forever
+                  </i>
+                  </div>
+              </div>
+            );
+          })
+        }
         </div>
-      </li>     
     );
   }
 }
 
-
-export default TodoListItem;
+function mapStateToProps(state) {
+  return {
+    reminders: state
+  }
+}
+export default connect(mapStateToProps, { updateReminders,deleteReminder })(TodoListItem);

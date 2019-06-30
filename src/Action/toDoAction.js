@@ -1,4 +1,4 @@
-import { ADD_REMINDER, DELETE_REMINDER, CLEAR_REMINDERS } from '../type';
+import { ADD_REMINDER, DELETE_REMINDER, CLEAR_REMINDERS, UPDATE_REMINDERS } from '../type';
 
 export const addReminder = ( title, description, dueDate) => {
     const action = {
@@ -7,7 +7,7 @@ export const addReminder = ( title, description, dueDate) => {
         description,
         dueDate
     }
-    console.log('-------------action in addReminder---------->', action);
+   /* console.log('-------------action in addReminder---------->', action);*/
     return action;
 }
 
@@ -16,13 +16,20 @@ export const deleteReminder = (id) => {
         type: DELETE_REMINDER,
         id
     }
-    console.log('---------------deleting in actions---------->', action);
+    /*console.log('---------------deleting in actions---------->', action);*/
     return action;
 }
 
 export const clearReminders = () => {
     const action = {
         type: CLEAR_REMINDERS
+    }
+    return action;
+}
+
+export const updateReminders = () => {
+    const action = {
+        type: UPDATE_REMINDERS
     }
     return action;
 }

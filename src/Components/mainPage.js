@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { addReminder, deleteReminder, clearReminders } from '../Action/toDoAction';
 import moment from 'moment';
 import DatePicker from "react-datepicker";
-import webNotif from './webNotif';
+import WebNotif from './webNotif';
 import "react-datepicker/dist/react-datepicker.css";
+import TodoListItem from './toDoListItems'
 
 class MainPage extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class MainPage extends Component {
       title: '',
       description: '',
       dueDate: '',
+      edit: false,
+      checked: false
     }
   }
 
@@ -25,13 +28,10 @@ class MainPage extends Component {
          let inputFields = document.querySelectorAll('input');
          inputFields.forEach(input => input.value = '');
     }else{
-         alert("Write something");
+         alert("You need to have a task and description");
     }
   }
 
-  deleteReminder = (id) => {
-    this.props.deleteReminder(id);
-  }
 
    handleChange = (date) => {
     this.setState({
@@ -39,42 +39,7 @@ class MainPage extends Component {
     });
   }
 
-  renderReminders = () => {
-    const { reminders } = this.props;
-    console.log("Reminder",reminders);
-    return (
-      <div className="width">
-        {
-          reminders.map(reminder => {
-            return (
-              <div className="d-flex list_container flex-wrap justify-content-between">
-                  <div className="" key={reminder.id}>
-                    <div className="title_style" contenteditable="true">{reminder.title}</div>
-                    <div className="desc_style" contenteditable="true">{reminder.description}</div>
-                    {reminder.dueDate && 
-                      <div className="d-flex">
-                        <div className="Reminder_text d-flex align-items-center">Reminder set for</div>
-                        <div className="Date_style">{moment(new Date(reminder.dueDate)).format('lll')}</div>
-                      </div>
-                    }
-                    
-                  </div>
-                  <div 
-                    className="d-flex align-items-center"
-                    onClick={() => this.deleteReminder(reminder.id)}
-                  >
-                  <i class="material-icons delete_icon ">
-                  delete_forever
-                  </i>
-                  </div>
-              </div>
-            );
-          })
-        }
-        </div>
-    );
-  }
-
+  
   render() {
     return (
       <div className="body_style">
@@ -85,7 +50,6 @@ class MainPage extends Component {
                onChange={event => this.setState({title: event.target.value})}>
                  <input 
                     type="text" 
-                    ref="itemName" 
                     className="form-control" 
                     placeholder="Add a new todo..."
                   />
@@ -111,6 +75,18 @@ class MainPage extends Component {
                 dateFormat="MM/dd/yyyy h:mm aa"
                 showTimeInput
                 minDate={new Date()}
+                popperPlacement="top-end"
+                popperModifiers={{
+                  offset: {
+                    enabled: true,
+                    offset: '5px, 10px'
+                  },
+                  preventOverflow: {
+                    enabled: true,
+                    escapeWithReference: false, // force popper to stay in viewport (even when input is scrolled out of view)
+                    boundariesElement: 'viewport'
+                  }
+                }}
             />
             </div>
             <div className="add_button d-flex align-items-center justify-content-center" onClick={this.onSubmit}>Add</div>
@@ -123,9 +99,10 @@ class MainPage extends Component {
             </div>
           </div>
           <div className="d-flex justify-content-center">
-          { this.renderReminders() }
+         {/* { this.renderReminders() }*/}
+          <TodoListItem />
           </div>
-          <webNotif />
+          <WebNotif />
           </div>
     );
   }

@@ -1,132 +1,82 @@
 import React from 'react';
-import Notification  from 'react-web-notification';
 import { connect } from 'react-redux';
 
 //allow react dev tools work
 window.React = React;
+const ACCURACY = 60000;
+
+function makeIgnoredList(reminders) {
+  const now = new Date();
+  if (!Array.isArray(reminders)) return [];
+  return reminders.filter(f => {
+      const dueDate = new Date(f.dueDate);
+      return dueDate - now < 0;
+  })
+  .map(f => f.id);
+}
 
 class WebNotif extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ignore: true,
-      title: ''
+      title: '',
+      ignoreList: makeIgnoredList(props.reminders)
     };
+    this.handleNotificationInterval = this.handleNotificationInterval.bind(this);
+    this.doTheNotificationThing = this.doTheNotificationThing.bind(this);
   }
 
-  handlePermissionGranted(){
-    console.log('Permission Granted');
+  componentDidMount() {
+    window.Notification.requestPermission(permission => {
+      if(permission === 'granted') {
+        this.interval = setInterval(this.handleNotificationInterval, ACCURACY);
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.interval) clearInterval(this.interval);
+  }
+
+  doTheNotificationThing(point) {
+    const ignoreList = this.state.ignoreList.slice().concat(point.id);
+    const { title, description } = point;
+    const header = "Hello";
+    const bodyData = "Your task "+title+" is due now"
+    const notification = new window.Notification(header, { body: bodyData });
+    console.log(notification)
+    navigator.vibrate(500);
     this.setState({
-      ignore: false
-    });
-  }
-  handlePermissionDenied(){
-    console.log('Permission Denied');
-    this.setState({
-      ignore: true
-    });
-  }
-  handleNotSupported(){
-    console.log('Web Notification not Supported');
-    this.setState({
-      ignore: true
-    });
+      ignoreList,
+    })
   }
 
-  handleNotificationOnClick(e, tag){
-    console.log(e, 'Notification clicked tag:' + tag);
-  }
-
-  handleNotificationOnError(e, tag){
-    console.log(e, 'Notification error tag:' + tag);
-  }
-
-  handleNotificationOnClose(e, tag){
-    console.log(e, 'Notification closed tag:' + tag);
-  }
-
-  /*handleNotificationOnShow(e, tag){
-    this.playSound();
-    console.log(e, 'Notification shown tag:' + tag);
-  }*/
-
-  /*playSound(filename){
-    document.getElementById('sound').play();
-  }*/
-
-  handleButtonClick() {
-   /*const data = {reminders.map(reminder => {
-       return reminder
-      })
-    }*/
-
-    if(this.state.ignore) {
-      return;
-    }
-
-    const now = Date.now();
-
-    const title = 'Hello';
-    const body = 'Task Name';
-    const tag = 'Your task is Due on' ;
-    /*const icon = 'http://mobilusoss.github.io/react-web-notification/example/Notifications_button_24.png';*/
-    // const icon = 'http://localhost:3000/Notifications_button_24.png';
-
-    // Available options
-    // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
-    const options = {
-      tag: tag,
-      body: body,
-     /* icon: icon,*/
-      lang: 'en',
-      dir: 'ltr',
-      // sound: './sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
-    }
-    this.setState({
-      title: title,
-      options: options
+  handleNotificationInterval() {
+    const { reminders: data } = this.props;
+    const {
+      ignoreList,
+    } = this.state;
+    if (!data) return;
+    const now = new Date();
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    data.filter(f => !ignoreList.includes(f.id)).map(point => {
+      const { dueDate } = point;
+      const check = new Date(dueDate);
+      check.setSeconds(0);
+      check.setMilliseconds(0);
+      if (Math.abs(check - now) < ACCURACY * 2) {
+        this.doTheNotificationThing(point);
+      }
     });
   }
 
-
-  /*getData = () => {
-    const date = {reminders.map(reminder => {
-                     return reminder.dueDate;
-                 })}
-   console.log("Date from web notif",date);
-  }*/
 
   render() {
-   const { reminders } = this.props;
-   console.log("Reminders from Web notif",reminders);
-   const date = <div>{reminders.map(reminder => {
-       return reminder.dueDate
-   })
-}</div>
-  console.log("Date from ", date);
     return (
       <div>
-             {/*{reminders.map(reminder => {
-                 return reminder.dueDate
-             })}*/}
-        <button onClick={this.handleButtonClick.bind(this)}>Notif!</button>
-        <Notification
-          ignore={this.state.ignore && this.state.title !== ''}
-          notSupported={this.handleNotSupported.bind(this)}
-          onPermissionGranted={this.handlePermissionGranted.bind(this)}
-          onPermissionDenied={this.handlePermissionDenied.bind(this)}
-          onClick={this.handleNotificationOnClick.bind(this)}
-          onClose={this.handleNotificationOnClose.bind(this)}
-          onError={this.handleNotificationOnError.bind(this)}
-          timeout={5000}
-          title={this.state.title}
-          options={this.state.options}
-        />
-        {/*<audio id='sound' preload='auto'>
-          <source src='./sound.mp3' type='audio/mpeg' />
-          <source src='./sound.ogg' type='audio/ogg' />
-          <embed hidden='true' autostart='false' loop='false' src='./sound.mp3' />
-        </audio>*/}
+        
       </div>
     )
   }

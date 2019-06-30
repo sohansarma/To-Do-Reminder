@@ -74,12 +74,28 @@
 
 }
 
+.title_style_checked{
+	font-size: 24px;
+	font-weight: 600;
+	outline: 0;
+	text-decoration: line-through;
+}
+
 .desc_style {
 	font-size: 16px;
 	color: #262626;
 	opacity: 0.7;
 	margin-left: 10px;
 	outline: 0;
+}
+
+.desc_style_checked {
+	font-size: 16px;
+	color: #262626;
+	opacity: 0.7;
+	margin-left: 10px;
+	outline: 0;
+	text-decoration: line-through;
 }
 
 .list_container{
@@ -90,12 +106,25 @@
 	margin-bottom: 4px;
 	margin-right: 50px;
 	background-color: #e6e4ec;
+	cursor: pointer;
 
+}
+
+.list_container_checked{
+	border: 1px solid #262626;
+	border-radius: 4px;
+	margin-left: 50px;
+	padding: 15px;
+	margin-bottom: 4px;
+	margin-right: 50px;
+	background-color: #35c1a2;
+	cursor: pointer;
 }
 
 .delete_icon{
 	margin-left: 5px;
 	cursor: pointer;
+	text-decoration: none!important;
 
 }
 

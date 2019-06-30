@@ -1,4 +1,4 @@
-import { ADD_REMINDER, DELETE_REMINDER, CLEAR_REMINDERS } from '../type';
+import { ADD_REMINDER, DELETE_REMINDER, CLEAR_REMINDERS, UPDATE_REMINDERS} from '../type';
 import { bake_cookie, read_cookie } from 'sfcookies';
 
 const reminder = (action) => {
@@ -7,14 +7,21 @@ const reminder = (action) => {
     id: Math.random(),
     title,
     description,
-    dueDate
+    dueDate,
+    reminded: false,
   }
 }
 
 //Removes data
 const removeById  = (state = [], id) => {
   const reminders = state.filter(reminder => reminder.id !== id);
-  console.log('new reduced reminders', reminders);
+  /*console.log('new reduced reminders', reminders);*/
+  return reminders;
+}
+
+const updateById  = (state = [], id) => {
+  const reminders = state.filter(reminder => reminder.id !== id);
+ /* console.log('new updated reminders', reminders);*/
   return reminders;
 }
 
@@ -39,6 +46,11 @@ const reminders = (state = [], action) => {
       reminders = [];
       bake_cookie('reminders', reminders);
       return reminders;
+
+    case UPDATE_REMINDERS:
+       reminders = updateById(state, action.id);
+       bake_cookie('reminders', reminders);
+       return reminders;
     
     default:
       return state;
