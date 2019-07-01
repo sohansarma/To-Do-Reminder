@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addReminder, deleteReminder, clearReminders } from '../Action/toDoAction';
-import moment from 'moment';
 import DatePicker from "react-datepicker";
 import WebNotif from './webNotif';
 import "react-datepicker/dist/react-datepicker.css";

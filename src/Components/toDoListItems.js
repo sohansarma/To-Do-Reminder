@@ -17,7 +17,7 @@ class TodoListItem extends React.Component {
     const { checked } = this.state;
     if (checked) {
       this.setState({
-        checked: null,
+        checked: !this.state.checked,
       });
     } else {
       this.setState({
@@ -39,16 +39,14 @@ class TodoListItem extends React.Component {
           reminders.map((reminder,index) => {
             return (
               <div key={reminder.id}
-                   index={index} 
                    onClick={() => this.completeState(reminder.id)}
                    className={checked === reminder.id ? "d-flex list_container_checked flex-wrap justify-content-between" : "d-flex list_container flex-wrap justify-content-between"}
                   >
-                  <div key={reminder.id}>
+                  <div>
                     <div 
                        className={checked === reminder.id ? "title_style_checked" : "title_style"} 
                        contenteditable="true"
                        onInput={event => this.setState({title: event.target.value})}
-                       onChange={this.onSubmitTitle}
                        >
                         {reminder.title}
                     </div>

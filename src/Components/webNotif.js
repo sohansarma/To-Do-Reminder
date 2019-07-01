@@ -41,7 +41,7 @@ class WebNotif extends React.Component {
 
   doTheNotificationThing(point) {
     const ignoreList = this.state.ignoreList.slice().concat(point.id);
-    const { title, description } = point;
+    const { title } = point;
     const header = "Hello";
     const bodyData = "Your task "+title+" is due now"
     const notification = new window.Notification(header, { body: bodyData });
